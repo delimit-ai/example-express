@@ -1,0 +1,157 @@
+openapi: "3.0.3"
+info:
+  title: TaskForge API
+  description: A minimal Express task management API.
+  version: "1.0.0"
+paths:
+  /api/tasks:
+    get:
+      summary: List Tasks
+      description: List all tasks, optionally filtered by status.
+      operationId: listTasks
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+    post:
+      summary: Create Task
+      description: Create a new task.
+      operationId: createTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreate"
+      responses:
+        "201":
+          description: Task created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/tasks/{taskId}:
+    get:
+      summary: Get Task
+      description: Get a task by ID.
+      operationId: getTask
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "404":
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete Task
+      description: Delete a task by ID.
+      operationId: deleteTask
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Task deleted
+        "404":
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/health:
+    get:
+      summary: Health Check
+      description: Health check endpoint.
+      operationId: healthCheck
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+components:
+  schemas:
+    Task:
+      type: object
+      required:
+        - id
+        - title
+        - created_at
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        status:
+          type: string
+          default: pending
+        created_at:
+          type: string
+          format: date-time
+        assignee:
+          type: string
+          nullable: true
+    TaskCreate:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        assignee:
+          type: string
+          nullable: true
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - uptime
+      properties:
+        status:
+          type: string
+        uptime:
+          type: integer
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string

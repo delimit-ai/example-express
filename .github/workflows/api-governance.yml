@@ -1,0 +1,17 @@
+name: API Governance
+on: pull_request
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+      - uses: delimit-ai/delimit-action@v1
+        with:
+          old_spec: base/api/openapi.yaml
+          new_spec: api/openapi.yaml
