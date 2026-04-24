@@ -1,3 +1,17 @@
+> [!IMPORTANT]
+> **This repository is archived.** Delimit has consolidated its examples.
+>
+> **Where to go instead:**
+> - [delimit-action-demo](https://github.com/delimit-ai/delimit-action-demo) — GitHub Action demo (6 intentional breaking changes)
+> - [delimit-quickstart](https://github.com/delimit-ai/delimit-quickstart) — 2-minute CLI tryout
+> - [quickstarts](https://github.com/delimit-ai/quickstarts) — framework templates (Django, Spring Boot, Rails, Go, Express)
+>
+> Install the [Delimit Action on Marketplace](https://github.com/marketplace/actions/delimit-api-governance) to add breaking-change detection to your CI.
+>
+> This repo stays public so existing links keep working.
+
+---
+
 # TaskForge API (Express)
 
 A minimal Express app demonstrating [Delimit](https://delimit.ai) API governance.
