@@ -17,11 +17,14 @@ app.get("/api/tasks", (req, res) => {
   res.json(result);
 });
 
-// Create task
+// Create task — now requires priority, uses assigned_to instead of assignee
 app.post("/api/tasks", (req, res) => {
-  const { title, description, assignee } = req.body;
+  const { title, description, assigned_to, priority } = req.body;
   if (!title) {
     return res.status(422).json({ detail: "title is required" });
+  }
+  if (!priority) {
+    return res.status(422).json({ detail: "priority is required" });
   }
   const task = {
     id: nextId++,
@@ -29,7 +32,8 @@ app.post("/api/tasks", (req, res) => {
     description: description || null,
     status: "pending",
     created_at: new Date().toISOString(),
-    assignee: assignee || null,
+    assigned_to: assigned_to || null,
+    priority,
   };
   tasks.push(task);
   res.status(201).json(task);
@@ -44,21 +48,13 @@ app.get("/api/tasks/:id", (req, res) => {
   res.json(task);
 });
 
-// Delete task by ID
-app.delete("/api/tasks/:id", (req, res) => {
-  const index = tasks.findIndex((t) => t.id === parseInt(req.params.id));
-  if (index === -1) {
-    return res.status(404).json({ detail: "Task not found" });
-  }
-  tasks.splice(index, 1);
-  res.status(204).send();
-});
+// DELETE endpoint removed
 
-// Health check
+// Health check — uptime changed from number to string
 app.get("/api/health", (req, res) => {
   res.json({
     status: "healthy",
-    uptime: Math.floor(process.uptime()),
+    uptime: `${Math.floor(process.uptime())} seconds`,
   });
 });
 
